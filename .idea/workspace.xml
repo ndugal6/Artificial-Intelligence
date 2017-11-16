@@ -17,12 +17,12 @@
       <file leaf-file-name="WalkSAT.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/WalkSAT.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
-              <caret line="116" column="0" lean-forward="true" selection-start-line="116" selection-start-column="0" selection-end-line="116" selection-end-column="0" />
+            <state relative-caret-position="146">
+              <caret line="51" column="37" lean-forward="false" selection-start-line="51" selection-start-column="37" selection-end-line="51" selection-end-column="37" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
-                <element signature="e#847#980#0" expanded="false" />
-                <element signature="e#1131#1502#0" expanded="false" />
+                <element signature="e#921#1054#0" expanded="false" />
+                <element signature="e#1205#1576#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -299,12 +299,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/WalkSAT.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="116" column="0" lean-forward="true" selection-start-line="116" selection-start-column="0" selection-end-line="116" selection-end-column="0" />
+        <state relative-caret-position="146">
+          <caret line="51" column="37" lean-forward="false" selection-start-line="51" selection-start-column="37" selection-end-line="51" selection-end-column="37" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
-            <element signature="e#847#980#0" expanded="false" />
-            <element signature="e#1131#1502#0" expanded="false" />
+            <element signature="e#921#1054#0" expanded="false" />
+            <element signature="e#1205#1576#0" expanded="false" />
           </folding>
         </state>
       </provider>

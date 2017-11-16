@@ -4,7 +4,9 @@ import argparse
 import random
 parser = argparse.ArgumentParser()
 parser.add_argument("Something")
-
+# Nicholas Dugal
+# Artificial Intelligence: A Modern Approach
+# 11/15/2017
 #-----------------------
 # Randomly determines the sign of a given symbol using the given probability
 #-----------------------
@@ -42,16 +44,14 @@ def getSymb(n,q):
 # This beast implements the walksat algorithm as defined in Artificial Intelligence: A Modern Approach
 #-----------------------
 def walkSat(n, m, k, q):
-
-
     myClauses = []
     # Loop until we have aquired the proper amount of clauses
     while (len(myClauses) < m):
         # Expression is a string we will be working with in building the clauses
         expressions = ""
-        exCount = 0
+        litCount = 0 # How Lit we are
         #Loop until we have constructed a proper expression -- contains either k or k-1 literals
-        while (exCount) < (k - 1):
+        while (litCount) < (k - 1):
             #--Do I want a compound or single literal construction this go round
             decisionsDecisions = random.choice([0, 1])
            # Single literal constructor
@@ -60,8 +60,7 @@ def walkSat(n, m, k, q):
                 theOP = randomOp()
                 ugh = str(theOP + val1)
                 expressions += ugh
-
-                exCount += 1
+                litCount += 1
             else:
                 val1 = getSymb(n,q)
                 val2 = getSymb(n,q)
@@ -73,11 +72,10 @@ def walkSat(n, m, k, q):
                 if paren:
                     newExpression = "( "+newExpression+" )"
                 #Unless this is the first literal, we will need an operator on the left hand side
-                if exCount > 0:
+                if litCount > 0:
                     newExpression = theOP2 + newExpression
-
                 expressions += newExpression
-                exCount += 2
+                litCount += 2
 
         try:
             tellExpr = expr(expressions)
