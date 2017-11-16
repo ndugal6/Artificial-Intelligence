@@ -83,8 +83,6 @@ def walkSat(n, m, k, q):
             myClauses.append(tellExpr)
         except:
             continue
-    print(WalkSAT(myClauses, 0.5, max_flips=100))
-
 
 def main():
 
