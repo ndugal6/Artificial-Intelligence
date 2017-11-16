@@ -90,16 +90,16 @@ def main():
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-n', action='store', dest='n', required=True, nargs='+',
+    parser.add_argument('-n', action='store', dest='n', required=False, nargs='+',
                         help=' ex: "-n 10\nA positive integer representing the number of distinct propositional symbols in a random set of clauses.')
 
-    parser.add_argument('-m', action='store', dest='m', required=True,
+    parser.add_argument('-m', action='store', dest='m', required=False,
                         help=' ex: "-m 15\nA positive integer representing the number of clauses in S.')
 
-    parser.add_argument('-k\n', action='store', dest='k', required=True,
+    parser.add_argument('-k\n', action='store', dest='k', required=False,
                         help=' ex: "-k 4\nthe maximum number of literals in a clause in the random set of clauses.')
 
-    parser.add_argument('-q', action='store', dest='q', required=True,
+    parser.add_argument('-q', action='store', dest='q', required=False,
                         help='ex: "-q 0.5\n0.40 ≤ q ≤ 0.60, rounded to the hundredths,  q is the probability that a literal in a clause is a negative literal. \n'
                              'The purpose of this parameter is to assure that the random clauses generated each would \n'
                              'typically have both positive and negative literals - if all clauses have only positive literals, \n'
@@ -113,23 +113,33 @@ def main():
     k = args.k
     q = args.q
 
+    numbersOrNahh = map(isnumber,[n,m,k])
+    if n is not None and is_in(False,numbersOrNahh)==False:
+        gogoGadget(n, m, k, q)
+    else:
+        print("Using Default Values")
+        gogoGadget(10,15,4,0.5)
+        gogoGadget(6,20,3,0.5)
 
+
+
+
+def gogoGadget(n, m, k, q):
     # -----------------------------------------
     # Print the information recd.
     # -----------------------------------------
-    print("Parameters passed")
     print("=" * 15)
+    print("Parameters passed")
+    print("-" * 15)
     print("Distinct Symbols    : %s" % str(n))
     print("Number of clauses : %s" % str(m))
     print("Max Amount of Literals   : %s" % str(k))
     print("Negative Literal Probability : %s" % str(q))
-    # walkSat(n, m, k, q)
+    print("-" * 15)
     try:
-        walkSat(n,m,k,q)
+        walkSat(n, m, k, q)
     except:
         print("Uhhh-Ohhhh")
-
-
 
 
 
