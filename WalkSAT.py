@@ -5,86 +5,135 @@ import random
 parser = argparse.ArgumentParser()
 parser.add_argument("Something")
 
-def nORp(value):
-    prefix = random.choice([True,False])
+#-----------------------
+# Randomly determines the sign of a given symbol using the given probability
+#-----------------------
+def nORp(value,q):  #Desperately needs hacking. Ugly but works.
+    #Here we create an array with a proportional amount Trues and False as the specified probability
+    pNeg = int(100*q)
+    pPos = 100-pNeg
+    pArrayLol = [True*pNeg] + [False*pPos]
+    #We select a random value and either add a negation symbol or return the symbol w/o modifications
+    prefix = random.choice(pArrayLol)
     if prefix:
         return '~' + value
-    else:
-        return value
+    return value
 
+#-----------------------
+# Randomly returns a valid operator for literal construction
+#-----------------------
 def randomOp():
     allOperators = [' & ', ' | ', ' ^ ', ' ==> ', ' <== ', ' <=> ']
     pleasePizza =  random.choice(allOperators)
     return pleasePizza
 
-def getSymb():
+#-----------------------
+# Randomly returns a symbol from a subset of size n of all possible symbols,
+#-----------------------
+def getSymb(n,q):
+    # Since I know the max number of max symbols you can specify I manually made an array and slice off only what I need
     allSymbols = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q']
-    distinctSymbols = allSymbols[:8]
-    hopeFullyRandom = nORp(random.choice(distinctSymbols))
+    distinctSymbols = allSymbols[:n]
+    # Randomly add negation to the symbols
+    hopeFullyRandom = nORp(random.choice(distinctSymbols),q)
     return hopeFullyRandom
 
+#-----------------------
+# This beast implements the walksat algorithm as defined in Artificial Intelligence: A Modern Approach
+#-----------------------
+def walkSat(n, m, k, q):
 
-def walkSat(nSym, mClause, maxLit, valueProb):
-    kb = PropKB()
-    allSymbols = list(symbols('A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q'))
-    distinctSymbols = allSymbols[:8]
 
-    # where 0 is a partial expression, and 1 is a full expression
-    litNum = 0
     myClauses = []
-    while (litNum < mClause):
+    # Loop until we have aquired the proper amount of clauses
+    while (len(myClauses) < m):
+        # Expression is a string we will be working with in building the clauses
         expressions = ""
         exCount = 0
-        while (exCount) < (maxLit - 1):
-            pORf = random.choice([0, 1])
-            # print(type(nORp(random.choice(allSymbols))))
-            # print(nORp(random.choice(allSymbols)))
-            # exit(0)
-            if pORf == 0:
-                val1 = getSymb()
-                # ugh = Expr(randomOp,val1,val2)
+        #Loop until we have constructed a proper expression -- contains either k or k-1 literals
+        while (exCount) < (k - 1):
+            #--Do I want a compound or single literal construction this go round
+            decisionsDecisions = random.choice([0, 1])
+           # Single literal constructor
+            if decisionsDecisions == 0:
+                val1 = getSymb(n,q)
                 theOP = randomOp()
                 ugh = str(theOP + val1)
                 expressions += ugh
-                litNum += 1
+
                 exCount += 1
             else:
-                val1 = getSymb()
-                val2 = getSymb()
+                val1 = getSymb(n,q)
+                val2 = getSymb(n,q)
                 paren = random.choice([True,False])
                 theOP = randomOp()
                 theOP2 = randomOp()
-                # if paren:
-                #     bitchPlease = str(" ( " + val1 + theOP + val2 + " ) ")
-                # else:
-                #
+                newExpression = val1 + theOP + val2
+                #Let's randomly surround coumpound literals with parenthesis
+                if paren:
+                    newExpression = "( "+newExpression+" )"
+                #Unless this is the first literal, we will need an operator on the left hand side
                 if exCount > 0:
-                    bitchPlease = theOP2 + val1 + theOP + val2
-                else:
-                    bitchPlease = val1 + theOP + val2
-                # if exCount > 0:
-                #     slow = randomOp()
-                #     pleaseWork = slow.join(bitchPlease)
-                #     bitchPlease = pleaseWork
-                # bitchPlease = Expr(randomOp(),val1,val2)
-                expressions += bitchPlease
-                exCount += 1
-                litNum += 2
-        # tellKB = ''.join(map(str, expressions))
-        tellExpr = expr(expressions)
-        print(tellExpr)
-        exit(0)
-        myClauses.append(tellExpr)
-    print(WalkSAT(myClauses, 0.5, max_flips=10000))
+                    newExpression = theOP2 + newExpression
+
+                expressions += newExpression
+                exCount += 2
+
+        try:
+            tellExpr = expr(expressions)
+            print(tellExpr)
+            myClauses.append(tellExpr)
+        except:
+            continue
+    print(WalkSAT(myClauses, 0.5, max_flips=100))
 
 
 def main():
-    # getSymb()
-    # exit(0)
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-n', action='store', dest='n', required=True, nargs='+',
+                        help=' ex: "-n 10\nA positive integer representing the number of distinct propositional symbols in a random set of clauses.')
+
+    parser.add_argument('-m', action='store', dest='m', required=True,
+                        help=' ex: "-m 15\nA positive integer representing the number of clauses in S.')
+
+    parser.add_argument('-k\n', action='store', dest='k', required=True,
+                        help=' ex: "-k 4\nthe maximum number of literals in a clause in the random set of clauses.')
+
+    parser.add_argument('-q', action='store', dest='q', required=True,
+                        help='ex: "-q 0.5\n0.40 ≤ q ≤ 0.60, rounded to the hundredths,  q is the probability that a literal in a clause is a negative literal. \n'
+                             'The purpose of this parameter is to assure that the random clauses generated each would \n'
+                             'typically have both positive and negative literals - if all clauses have only positive literals, \n'
+                             'we know for sure the set S is satisfiable')
+    # ---------------------------
+    # Argument Parsing
+    # ---------------------------
+    args = parser.parse_args()
+    n = args.n
+    m = args.m
+    k = args.k
+    q = args.q
+
+    n = 10
+    m = 15
+    k = 4
+    q = 0.5
+
+    # -----------------------------------------
+    # Print the information recd.
+    # -----------------------------------------
+    print("Parameters passed")
+    print("=" * 15)
+    print("Distinct Symbols    : %s" % str(n))
+    print("Number of clauses : %s" % str(m))
+    print("Max Amount of Literals   : %s" % str(k))
+    print("Negative Literal Probability : %s" % str(q))
+    # walkSat(n, m, k, q)
     try:
-        walkSat(5,0.1,5,1)
+        walkSat(n,m,k,q)
     except:
-        print("")
+        print("Uhhh-Ohhhh")
 
 
 
