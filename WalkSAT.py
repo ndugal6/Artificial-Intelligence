@@ -2,8 +2,8 @@ from utils import *
 from logic import *
 import argparse
 import random
-parser = argparse.ArgumentParser()
-parser.add_argument("Something")
+
+
 # Nicholas Dugal
 # Artificial Intelligence: A Modern Approach
 # 11/15/2017
