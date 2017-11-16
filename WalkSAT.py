@@ -115,10 +115,6 @@ def main():
     k = args.k
     q = args.q
 
-    n = 10
-    m = 15
-    k = 4
-    q = 0.5
 
     # -----------------------------------------
     # Print the information recd.
