@@ -83,6 +83,9 @@ def walkSat(n, m, k, q):
             myClauses.append(tellExpr)
         except:
             continue
+    walked = WalkSAT(myClauses,0.5,1000)
+    if (walked==None)==False:
+        print(walked)
 
 def main():
 
@@ -134,10 +137,11 @@ def gogoGadget(n, m, k, q):
     print("Max Amount of Literals   : %s" % str(k))
     print("Negative Literal Probability : %s" % str(q))
     print("-" * 15)
-    try:
-        walkSat(n, m, k, q)
-    except:
-        print("Uhhh-Ohhhh")
+    # try:
+    walkSat(n, m, k, q)
+
+    # except:
+    #     print("Uhhh-Ohhhh")
 
 
 

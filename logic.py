@@ -662,6 +662,7 @@ def WalkSAT(clauses, p=0.5, max_flips=10000):
     """Checks for satisfiability of all clauses by randomly flipping values of variables
     """
     # Set of all symbols in all clauses
+    flipCount = 0
     symbols = {sym for clause in clauses for sym in prop_symbols(clause)}
     # model is a random assignment of true/false to the symbols in clauses
     model = {s: random.choice([True, False]) for s in symbols}
@@ -670,11 +671,13 @@ def WalkSAT(clauses, p=0.5, max_flips=10000):
         for clause in clauses:
             (satisfied if pl_true(clause, model) else unsatisfied).append(clause)
         if not unsatisfied:  # if model satisfies all the clauses
+            print("Flips: ",flipCount)
             return model
         clause = random.choice(unsatisfied)
         if probability(p):
             sym = random.choice(list(prop_symbols(clause)))
         else:
+            flipCount += 1
             # Flip the symbol in clause that maximizes number of sat. clauses
             def sat_count(sym):
                 # Return the the number of clauses satisfied after flipping the symbol.
@@ -685,6 +688,8 @@ def WalkSAT(clauses, p=0.5, max_flips=10000):
             sym = argmax(prop_symbols(clause), key=sat_count)
         model[sym] = not model[sym]
     # If no solution is found within the flip limit, we return failure
+    print("Flips: ", flipCount)
+    print("No solution found")
     return None
 
 # ______________________________________________________________________________
